@@ -112,7 +112,7 @@ export function AddCityDialog({ open, onOpenChange, onAddCity }) {
           
           <div style={{ marginBottom: '1.25rem' }}>
             <label htmlFor="coverImage" style={{ display: 'block', color: '#374151', marginBottom: '0.5rem', fontWeight: '500' }}>
-              Cover Image URL
+              Cover Image URL <span style={{ color: '#ef4444' }}>*</span>
             </label>
             <input
               id="coverImage"
@@ -142,7 +142,7 @@ export function AddCityDialog({ open, onOpenChange, onAddCity }) {
           
           <div style={{ marginBottom: '1.25rem' }}>
             <label htmlFor="content" style={{ display: 'block', color: '#374151', marginBottom: '0.5rem', fontWeight: '500' }}>
-              Description
+              Description <span style={{ color: '#ef4444' }}>*</span>
             </label>
             <textarea
               id="content"
