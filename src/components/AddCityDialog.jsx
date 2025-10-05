@@ -118,6 +118,7 @@ export function AddCityDialog({ open, onOpenChange, onAddCity }) {
               id="coverImage"
               type="text"
               value={coverImage}
+              required
               onChange={(e) => setCoverImage(e.target.value)}
               placeholder="https://example.com/image.jpg"
               style={{
@@ -146,6 +147,7 @@ export function AddCityDialog({ open, onOpenChange, onAddCity }) {
             <textarea
               id="content"
               value={content}
+              required
               onChange={(e) => setContent(e.target.value)}
               placeholder="Write a short description about this city..."
               style={{

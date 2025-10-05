@@ -78,7 +78,8 @@ export function CategoryFormDialog({
           { key: 'image1', label: 'Image 2 URL', type: 'text' },
           { key: 'image2', label: 'Image 3 URL', type: 'text' },
           { key: 'flagShip', label: 'Flagship Property', type: 'checkbox' },
-          { key: 'premium', label: 'Premium', type: 'checkbox' },
+          // { key: 'premium', label: 'Premium', type: 'checkbox' },
+          { key: 'premium', label: 'Premium', type: 'select', options: ['FREE', 'A', 'B'],default: 'FREE' },
         ];
       case 'GeneralCityInfo':
         return [
@@ -89,7 +90,7 @@ export function CategoryFormDialog({
           { key: 'bestTimeToVisit', label: 'Best Time to Visit', type: 'text' },
           { key: 'cityHistory', label: 'City History', type: 'textarea' },
           { key: 'coverImage', label: 'Cover Image URL', type: 'text' },
-          { key: 'premium', label: 'Premium Status', type: 'text' },
+          { key: 'premium', label: 'Premium', type: 'select', options: ['FREE', 'A', 'B'],default: 'FREE' },
         ];
       case 'Activities':
         return [
@@ -100,7 +101,7 @@ export function CategoryFormDialog({
           { key: 'fee', label: 'Entry Fee/Cost', type: 'text' },
           { key: 'image0', label: 'Image URL', type: 'text' },
           { key: 'videos', label: 'Video URLs', type: 'array' },
-          { key: 'premium', label: 'Premium Activity', type: 'checkbox' },
+          { key: 'premium', label: 'Premium', type: 'select', options: ['FREE', 'A', 'B'],default: 'FREE' },
         ];
       case 'Connectivity':
         return [
@@ -110,7 +111,7 @@ export function CategoryFormDialog({
           { key: 'lon', label: 'Longitude', type: 'number' },
           { key: 'locationLink', label: 'Location Link', type: 'text' },
           { key: 'majorFlightsTrainsBuses', label: 'Major Flights/Trains/Buses', type: 'textarea' },
-          { key: 'premium', label: 'Premium', type: 'checkbox' },
+          { key: 'premium', label: 'Premium', type: 'select', options: ['FREE', 'A', 'B'],default: 'FREE' },
         ];
       case 'Food':
         return [
@@ -137,7 +138,7 @@ export function CategoryFormDialog({
           { key: 'image1', label: 'Image 2 URL', type: 'text' },
           { key: 'image2', label: 'Image 3 URL', type: 'text' },
           { key: 'videos', label: 'Video URLs', type: 'array' },
-          { key: 'premium', label: 'Premium', type: 'checkbox' },
+          { key: 'premium', label: 'Premium', type: 'select', options: ['FREE', 'A', 'B'],default: 'FREE' },
         ];
 
       case 'HiddenGems':
@@ -159,7 +160,7 @@ export function CategoryFormDialog({
           { key: 'image1', label: 'Image 2 URL', type: 'text' },
           { key: 'image2', label: 'Image 3 URL', type: 'text' },
           { key: 'videos', label: 'Video URLs', type: 'array' },
-          { key: 'premium', label: 'Premium', type: 'checkbox' },
+          { key: 'premium', label: 'Premium', type: 'select', options: ['FREE', 'A', 'B'],default: 'FREE' },
         ];
 
       case 'LocalTransport':
@@ -169,7 +170,7 @@ export function CategoryFormDialog({
           { key: 'autoPrice', label: 'Auto Price', type: 'text' },
           { key: 'cabPrice', label: 'Cab Price', type: 'text' },
           { key: 'bikePrice', label: 'Bike Price', type: 'text' },
-          { key: 'premium', label: 'Premium', type: 'checkbox' },
+          { key: 'premium', label: 'Premium', type: 'select', options: ['FREE', 'A', 'B'],default: 'FREE' },
         ];
 
       case 'NearbyTouristSpots':
@@ -192,7 +193,7 @@ export function CategoryFormDialog({
           { key: 'image1', label: 'Image 2 URL', type: 'text' },
           { key: 'image2', label: 'Image 3 URL', type: 'text' },
           { key: 'videos', label: 'Video URLs', type: 'array' },
-          { key: 'premium', label: 'Premium', type: 'checkbox' },
+          { key: 'premium', label: 'Premium', type: 'select', options: ['FREE', 'A', 'B'],default: 'FREE' },
         ];
 
       case 'PlacesToVisit':
@@ -214,7 +215,7 @@ export function CategoryFormDialog({
           { key: 'image1', label: 'Image 2 URL', type: 'text' },
           { key: 'image2', label: 'Image 3 URL', type: 'text' },
           { key: 'videos', label: 'Video URLs', type: 'array' },
-          { key: 'premium', label: 'Premium', type: 'checkbox' },
+          { key: 'premium', label: 'Premium', type: 'select', options: ['FREE', 'A', 'B'],default: 'FREE' },
         ];
 
       case 'Shopping':
@@ -234,7 +235,7 @@ export function CategoryFormDialog({
           { key: 'image0', label: 'Image 1 URL', type: 'text' },
           { key: 'image1', label: 'Image 2 URL', type: 'text' },
           { key: 'image2', label: 'Image 3 URL', type: 'text' },
-          { key: 'premium', label: 'Premium', type: 'checkbox' },
+          { key: 'premium', label: 'Premium', type: 'select', options: ['FREE', 'A', 'B'],default: 'FREE' },
         ];
 
       case 'Miscellaneous':
@@ -256,7 +257,7 @@ export function CategoryFormDialog({
           { key: 'publicWashroomsLocationLink', label: 'Washrooms Location Link', type: 'text' },
           { key: 'publicWashroomsLat', label: 'Washrooms Latitude', type: 'number' },
           { key: 'publicWashroomsLon', label: 'Washrooms Longitude', type: 'number' },
-          { key: 'premium', label: 'Premium', type: 'text' },
+          { key: 'premium', label: 'Premium', type: 'select', options: ['FREE', 'A', 'B'],default: 'FREE' },
         ];
 
       default:
@@ -357,7 +358,7 @@ export function CategoryFormDialog({
                   {field.label} {field.required && <span className="text-red-500">*</span>}
                 </Label>
 
-                {field.type === 'textarea' ? (
+                {/* {field.type === 'textarea' ? (
                   <Textarea
                     id={field.key}
                     value={formData[field.key] || ''}
@@ -400,7 +401,66 @@ export function CategoryFormDialog({
                     max={field.max}
                     className="border-blue-200 focus:border-blue-500 focus:ring-blue-500 bg-white"
                   />
-                )}
+                )} */}
+
+                {field.type === 'textarea' ? (
+  <Textarea
+    id={field.key}
+    value={formData[field.key] || ''}
+    onChange={(e) => updateFormData(field.key, e.target.value)}
+    required={field.required}
+    className="border-blue-200 focus:border-blue-500 focus:ring-blue-500 bg-white min-h-[80px]"
+  />
+) : field.type === 'checkbox' ? (
+  <div className="flex items-center space-x-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+    <Checkbox
+      id={field.key}
+      checked={!!formData[field.key]}
+      onCheckedChange={(checked) => updateFormData(field.key, checked)}
+      className="border-blue-300 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
+    />
+    <Label htmlFor={field.key} className="text-sm text-slate-700 cursor-pointer">
+      {field.label}
+    </Label>
+  </div>
+) : field.type === 'array' ? (
+  <Input
+    id={field.key}
+    value={
+      Array.isArray(formData[field.key])
+        ? formData[field.key].join(', ')
+        : formData[field.key] || ''
+    }
+    onChange={(e) => updateFormData(field.key, e.target.value)}
+    placeholder="Separate multiple items with commas"
+    className="border-blue-200 focus:border-blue-500 focus:ring-blue-500 bg-white"
+  />
+) : field.type === 'select' ? (
+  <select
+    id={field.key}
+    value={formData[field.key] || field.default || ''}
+    onChange={(e) => updateFormData(field.key, e.target.value)}
+    className="border-blue-200 focus:border-blue-500 focus:ring-blue-500 bg-white rounded-md p-2"
+  >
+    {field.options.map((option) => (
+      <option key={option} value={option}>
+        {option}
+      </option>
+    ))}
+  </select>
+) : (
+  <Input
+    id={field.key}
+    type={field.type}
+    value={formData[field.key] || ''}
+    onChange={(e) => updateFormData(field.key, e.target.value)}
+    required={field.required}
+    min={field.min}
+    max={field.max}
+    className="border-blue-200 focus:border-blue-500 focus:ring-blue-500 bg-white"
+  />
+)}
+
               </div>
             ))}
           </div>
