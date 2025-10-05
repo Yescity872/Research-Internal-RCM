@@ -337,7 +337,7 @@ export function CategoryFormDialog({
         <DialogHeader className="space-y-3 pb-4 border-b border-blue-100">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 gradient-primary rounded-lg flex items-center justify-center shadow-md">
-              {editData ? <Edit className="w-5 h-5 text-white" /> : <Plus className="w-5 h-5 text-white" />}
+              {editData ? <Edit className="w-5 h-5 text-blue-400" /> : <Plus className="w-5 h-5 text-blue-400" />}
             </div>
             <div>
               <DialogTitle className="text-xl text-slate-800">
