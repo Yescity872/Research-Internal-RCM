@@ -12,12 +12,12 @@ import { Progress } from "../components/ui/progress";
 // import { useToast } from "../components/ui/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
 import { categoryApi } from "../services/api";
-import { 
-  Building2, 
-  MapPin, 
-  Layers, 
-  Plus, 
-  RefreshCw, 
+import {
+  Building2,
+  MapPin,
+  Layers,
+  Plus,
+  RefreshCw,
   Sparkles,
   ChevronRight,
   TrendingUp,
@@ -34,8 +34,15 @@ import {
   CheckCircle2,
   Clock,
   Database,
-  Activity
+  UserPlus,
+  Activity,
+  LogOut,
+  User
+  
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import CreateAccountModal from "./Signup";
+
 
 const Index = () => {
   const [selectedCity, setSelectedCity] = useState(null);
@@ -55,8 +62,20 @@ const Index = () => {
   const [error, setError] = useState(null);
   const [filters, setFilters] = useState({});
   const [dataStats, setDataStats] = useState({});
-
+const navigate = useNavigate();
   // const { toast } = useToast();
+
+  const [isCreateAccountOpen, setIsCreateAccountOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const isAdmin = user.role === 'admin';
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    window.location.href = '/login';
+  };
 
   // Keys for persistence
   const STORAGE_KEYS = {
@@ -165,10 +184,10 @@ const Index = () => {
       const response = await categoryApi.getByCity(selectedCategory, selectedCity.cityId);
       setCategoryData(response.data);
       setLastUpdated(new Date());
-      
+
       clearInterval(progressInterval);
       setRefreshProgress(100);
-      
+
       setTimeout(() => setRefreshProgress(0), 1000);
 
       // toast({
@@ -181,7 +200,7 @@ const Index = () => {
       console.error("Failed to fetch category data:", error);
       setError("Failed to load data. Please try again.");
       setCategoryData([]);
-      
+
       // toast({
       //   title: "Error loading data",
       //   description: "Please check your connection and try again.",
@@ -228,14 +247,14 @@ const Index = () => {
     // Simple export to JSON
     const dataStr = JSON.stringify(categoryData, null, 2);
     const dataUri = `data:application/json;charset=utf-8,${encodeURIComponent(dataStr)}`;
-    
+
     const exportFileDefaultName = `${selectedCity.cityName}_${selectedCategory}_${new Date().toISOString().split('T')[0]}.json`;
-    
+
     const linkElement = document.createElement('a');
     linkElement.setAttribute('href', dataUri);
     linkElement.setAttribute('download', exportFileDefaultName);
     linkElement.click();
-    
+
     // toast({
     //   title: "Data exported",
     //   description: `Data has been downloaded as ${exportFileDefaultName}`,
@@ -264,7 +283,7 @@ const Index = () => {
   const getTimeAgo = (date) => {
     if (!date) return "Never";
     const seconds = Math.floor((new Date() - new Date(date)) / 1000);
-    
+
     if (seconds < 60) return "Just now";
     if (seconds < 3600) return `${Math.floor(seconds / 60)} minutes ago`;
     if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours ago`;
@@ -275,7 +294,7 @@ const Index = () => {
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-gradient-to-br from-blue-50 via-white to-slate-50">
         {/* Sidebar */}
-        <div 
+        <div
           className={`
             flex-shrink-0 border-r border-blue-100 bg-white shadow-professional backdrop-blur-sm
             transition-all duration-300 ease-in-out
@@ -312,9 +331,9 @@ const Index = () => {
             mobile={true}
           />
         </div>
-        
+
         {/* Main Content */}
-        <div 
+        <div
           className={`
             flex-1 flex flex-col min-w-0 transition-all duration-300
             ${sidebarCollapsed ? 'md:ml-0' : 'md:ml-0'}
@@ -328,7 +347,7 @@ const Index = () => {
           <header className="h-20 border-b border-blue-100 bg-white/95 backdrop-blur-sm flex items-center px-4 md:px-6 lg:px-8 sticky top-0 z-30 shadow-card w-full">
             <div className="flex items-center w-full">
               <SidebarTrigger className="md:hidden" />
-              
+
               <div className="flex items-center gap-4 min-w-0 flex-1 ml-2 md:ml-0">
                 <div className="relative">
                   <div className="w-10 h-10 md:w-12 md:h-12 gradient-primary rounded-xl flex items-center justify-center flex-shrink-0 shadow-md">
@@ -338,7 +357,7 @@ const Index = () => {
                     <Sparkles className="w-2 h-2 md:w-3 md:h-3 text-white" />
                   </div>
                 </div>
-                
+
                 <div className="min-w-0 flex-1">
                   <h1 className="text-xl md:text-2xl bg-gradient-to-r from-blue-700 to-blue-500 bg-clip-text text-transparent">
                     City Management Dashboard
@@ -370,9 +389,68 @@ const Index = () => {
                     </div>
                   )}
                 </div>
+                {/* Right side - User actions */}
+          <div className="flex items-center gap-4">
+            {/* Create Account Button (Admin only) */}
+            {isAdmin && (
+              <button
+                onClick={() => setIsCreateAccountOpen(true)}
+                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-lg font-medium hover:from-blue-700 hover:to-blue-600 transition-all shadow-sm"
+              >
+                <UserPlus className="w-4 h-4" />
+                <span className="hidden sm:inline">Create Account</span>
+              </button>
+            )}
+
+            {/* User Menu */}
+            <div className="relative">
+              <button
+                onClick={() => setUserMenuOpen(!userMenuOpen)}
+                className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              >
+                <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-blue-400 rounded-full flex items-center justify-center text-white text-sm font-medium">
+                  {user.name ? user.name.charAt(0).toUpperCase() : <User className="w-4 h-4" />}
+                </div>
+                <div className="hidden sm:block text-left">
+                  <p className="text-sm font-medium text-gray-900">{user.name}</p>
+                  <p className="text-xs text-gray-500 capitalize">{user.role}</p>
+                </div>
+              </button>
+
+              {/* User Dropdown Menu */}
+              {userMenuOpen && (
+                <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-40">
+                  <div className="px-4 py-2 border-b border-gray-100">
+                    <p className="text-sm font-medium text-gray-900">{user.name}</p>
+                    <p className="text-xs text-gray-500">{user.email}</p>
+                    <Badge className="mt-1 capitalize" variant={user.role === 'admin' ? 'default' : 'secondary'}>
+                      {user.role}
+                    </Badge>
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    Sign Out
+                  </button>
+                </div>
+              )}
+            </div>
+            </div>
               </div>
             </div>
           </header>
+
+          {/* Create Account Modal */}
+      <CreateAccountModal
+        isOpen={isCreateAccountOpen}
+        onClose={() => setIsCreateAccountOpen(false)}
+        onAccountCreated={() => {
+          // Optional: Refresh users list or show notification
+          console.log('New account created');
+        }}
+      />
 
           {/* Progress Bar for Loading */}
           {refreshProgress > 0 && refreshProgress < 100 && (
@@ -402,7 +480,7 @@ const Index = () => {
                             {selectedCategory}
                           </h2>
                           <p className="text-slate-600 mt-1 flex items-center gap-2 flex-wrap">
-                            Managing <Badge variant="secondary" className="bg-blue-50 text-blue-700 border-blue-200">{filteredData.length} records</Badge> 
+                            Managing <Badge variant="secondary" className="bg-blue-50 text-blue-700 border-blue-200">{filteredData.length} records</Badge>
                             for <span className="text-slate-700">{selectedCity.cityName}</span>
                             {searchTerm && (
                               <Badge variant="outline" className="flex items-center gap-1 border-blue-200 text-blue-600">
@@ -414,9 +492,9 @@ const Index = () => {
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center gap-2 md:gap-3">
-                      <Button 
+                      <Button
                         onClick={handleAddData}
                         className="gradient-primary hover:bg-blue-600 shadow-md border-0 text-white"
                         size="sm"
@@ -424,7 +502,7 @@ const Index = () => {
                         <Plus className="w-4 h-4 mr-1 md:mr-2" />
                         <span className="hidden md:inline">Add New</span>
                       </Button>
-                      <Button 
+                      <Button
                         onClick={handleGetData}
                         variant="outline"
                         disabled={loading}
@@ -434,7 +512,7 @@ const Index = () => {
                         <RefreshCw className={`w-4 h-4 mr-1 md:mr-2 ${loading ? 'animate-spin' : ''}`} />
                         <span className="hidden md:inline">Refresh</span>
                       </Button>
-                      <Button 
+                      <Button
                         onClick={handleExportData}
                         variant="outline"
                         size="sm"
@@ -464,9 +542,9 @@ const Index = () => {
                         <Filter className="w-4 h-4 mr-2" />
                         Clear Filters
                       </Button>
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
+                      <Button
+                        variant="outline"
+                        size="sm"
                         onClick={() => setShowStats(!showStats)}
                         className="border-blue-200 text-blue-600 hover:bg-blue-50"
                       >
@@ -494,7 +572,7 @@ const Index = () => {
                         Charts
                       </TabsTrigger>
                     </TabsList>
-                    
+
                     <div className="text-sm text-slate-600">
                       Showing {filteredData.length} of {categoryData.length} records
                     </div>
@@ -584,7 +662,7 @@ const Index = () => {
               city={selectedCity}
               onSuccess={handleFormSuccess}
             />
-            
+
             <CategoryFormDialog
               open={showEditForm}
               onOpenChange={setShowEditForm}
