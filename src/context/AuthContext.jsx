@@ -61,17 +61,36 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is authenticated on app load
+    // Check authentication status on component mount
+    checkAuthStatus();
+  }, []);
+
+  const checkAuthStatus = () => {
     const token = localStorage.getItem('token');
     const user = localStorage.getItem('user');
     
     if (token && user) {
+      // Optional: Verify token is still valid by making an API call
+      // For now, we'll just check if token exists
       setIsAuthenticated(true);
     } else {
       setIsAuthenticated(false);
     }
     setLoading(false);
-  }, []);
+  };
+
+  // useEffect(() => {
+  //   // Check if user is authenticated on app load
+  //   const token = localStorage.getItem('token');
+  //   const user = localStorage.getItem('user');
+    
+  //   if (token && user) {
+  //     setIsAuthenticated(true);
+  //   } else {
+  //     setIsAuthenticated(false);
+  //   }
+  //   setLoading(false);
+  // }, []);
 
   const login = (token, user) => {
     localStorage.setItem('token', token);
