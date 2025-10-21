@@ -131,12 +131,6 @@ const LoginPage = () => {
               {loading ? 'Signing in...' : 'Sign in'}
             </button>
           </form>
-
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
-              Demo credentials: admin@city.com / password
-            </p>
-          </div>
         </div>
       </div>
     </div>
