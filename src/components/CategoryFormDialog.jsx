@@ -15,6 +15,26 @@ import { categoryApi } from "../services/api";
 import { Layers, Save, X, Plus, Edit } from "lucide-react";
 // import { useToast } from "../hooks/use-toast";
 
+const extractLatLonFromUrl = (url) => {
+  if (!url) return { lat: null, lon: null };
+
+  try {
+    // Method 1: Extract from @lat,lon format (most common in Google Maps URLs)
+    const atSymbolMatch = url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+    if (atSymbolMatch) {
+      return {
+        lat: parseFloat(atSymbolMatch[1]),
+        lon: parseFloat(atSymbolMatch[2])
+      };
+    }
+
+    return { lat: null, lon: null };
+  } catch (error) {
+    console.error('Error parsing URL:', error);
+    return { lat: null, lon: null };
+  }
+};
+
 export function CategoryFormDialog({
   open,
   onOpenChange,
@@ -26,6 +46,10 @@ export function CategoryFormDialog({
   //   const { toast } = useToast();
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
+
+  const updateFormData = (key, value) => {
+    setFormData(prev => ({ ...prev, [key]: value }));
+  };
 
   useEffect(() => {
     if (open) {
@@ -59,6 +83,47 @@ export function CategoryFormDialog({
       }
     }
   }, [open, editData, city]);
+
+    
+
+  // Function to handle location link changes and auto-fill lat/lon
+  // const handleLocationLinkChange = (value) => {
+  //   // updateFormData('locationLink', value);
+  //   setFormData(prev=>({'locationLink': value}));
+    
+  //   // Extract coordinates from the URL
+  //   const { lat, lon } = extractLatLonFromUrl(value);
+
+  //   console.log('Extracted coordinates:', { lat, lon }); // Debug log
+    
+  //   if (lat !== null && lon !== null) {
+  //     // Update lat and lon fields if they exist in the form
+  //     setFormData(prev => ({
+  //       ...prev,
+  //       lat: lat,
+  //       lon: lon
+  //     }));
+  //   }
+  // };
+
+  const handleLocationLinkChange = (value) => {
+  // First update the locationLink field while preserving other fields
+  setFormData(prev => ({ ...prev, locationLink: value }));
+  
+  // Extract coordinates from the URL
+  const { lat, lon } = extractLatLonFromUrl(value);
+
+  console.log('Extracted coordinates:', { lat, lon }); // Debug log
+  
+  if (lat !== null && lon !== null) {
+    // Update lat and lon fields while preserving all other fields
+    setFormData(prev => ({
+      ...prev, // This preserves all existing fields
+      lat: lat,
+      lon: lon
+    }));
+  }
+};
 
   const getFormFields = () => {
     switch (category) {
@@ -325,9 +390,9 @@ export function CategoryFormDialog({
     }
   };
 
-  const updateFormData = (key, value) => {
-    setFormData(prev => ({ ...prev, [key]: value }));
-  };
+  // const updateFormData = (key, value) => {
+  //   setFormData(prev => ({ ...prev, [key]: value }));
+  // };
 
   const fields = getFormFields();
 
@@ -403,7 +468,17 @@ export function CategoryFormDialog({
                   />
                 )} */}
 
-                {field.type === 'textarea' ? (
+                {field.key === 'locationLink' ? (
+                  <Input
+                    id={field.key}
+                    type={field.type}
+                    value={formData[field.key] || ''}
+                    onChange={(e) => handleLocationLinkChange(e.target.value)}
+                    required={field.required}
+                    placeholder="Paste Google Maps link to auto-fill coordinates"
+                    className="border-blue-200 focus:border-blue-500 focus:ring-blue-500 bg-white"
+                  />
+                ) : field.type === 'textarea' ? (
   <Textarea
     id={field.key}
     value={formData[field.key] || ''}
