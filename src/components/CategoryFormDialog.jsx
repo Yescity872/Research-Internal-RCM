@@ -106,21 +106,66 @@ export function CategoryFormDialog({
   //   }
   // };
 
-  const handleLocationLinkChange = (value) => {
+//   const handleLocationLinkChange = (value) => {
+//   // First update the locationLink field while preserving other fields
+//   setFormData(prev => ({ ...prev, locationLink: value }));
+  
+//   // Extract coordinates from the URL
+//   const { lat, lon } = extractLatLonFromUrl(value);
+
+//   console.log('Extracted coordinates:', { lat, lon }); // Debug log
+  
+//   if (lat !== null && lon !== null) {
+//     // Update lat and lon fields while preserving all other fields
+//     setFormData(prev => ({
+//       ...prev, // This preserves all existing fields
+//       lat: lat,
+//       lon: lon
+//     }));
+//   }
+// };
+
+const handleLocationLinkChange = (value, fieldKey) => {
   // First update the locationLink field while preserving other fields
-  setFormData(prev => ({ ...prev, locationLink: value }));
+  setFormData(prev => ({ ...prev, [fieldKey]: value }));
   
   // Extract coordinates from the URL
   const { lat, lon } = extractLatLonFromUrl(value);
 
-  console.log('Extracted coordinates:', { lat, lon }); // Debug log
+  console.log('Extracted coordinates:', { lat, lon, fieldKey }); // Debug log
   
   if (lat !== null && lon !== null) {
+    // For Miscellaneous category, map location links to their corresponding lat/lon fields
+    let latField, lonField;
+    
+    switch (fieldKey) {
+      case 'hospitalLocationLink':
+        latField = 'hospitalLat';
+        lonField = 'hospitalLon';
+        break;
+      case 'PoliceLocationLink':
+        latField = 'PoliceLat';
+        lonField = 'PoliceLon';
+        break;
+      case 'parkingLocationLink':
+        latField = 'parkingLat';
+        lonField = 'parkingLon';
+        break;
+      case 'publicWashroomsLocationLink':
+        latField = 'publicWashroomsLat';
+        lonField = 'publicWashroomsLon';
+        break;
+      default:
+        // For other categories, use generic lat/lon fields
+        latField = 'lat';
+        lonField = 'lon';
+    }
+    
     // Update lat and lon fields while preserving all other fields
     setFormData(prev => ({
       ...prev, // This preserves all existing fields
-      lat: lat,
-      lon: lon
+      [latField]: lat,
+      [lonField]: lon
     }));
   }
 };
@@ -468,12 +513,16 @@ export function CategoryFormDialog({
                   />
                 )} */}
 
-                {field.key === 'locationLink' ? (
+                {field.key === 'locationLink' || 
+ field.key === 'hospitalLocationLink' || 
+ field.key === 'PoliceLocationLink' || 
+ field.key === 'parkingLocationLink' || 
+ field.key === 'publicWashroomsLocationLink' ? (
                   <Input
                     id={field.key}
                     type={field.type}
                     value={formData[field.key] || ''}
-                    onChange={(e) => handleLocationLinkChange(e.target.value)}
+                    onChange={(e) => handleLocationLinkChange(e.target.value,field.key)}
                     required={field.required}
                     placeholder="Paste Google Maps link to auto-fill coordinates"
                     className="border-blue-200 focus:border-blue-500 focus:ring-blue-500 bg-white"
